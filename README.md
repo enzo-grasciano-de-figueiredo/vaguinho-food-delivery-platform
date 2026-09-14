@@ -18,23 +18,23 @@ A aplicação web do cliente está publicada e acessível em:
 
 ---
 
-## 📱 Visão Geral da Solução Comercial
+## 📱 Demonstração Visual da Aplicação Mobile (PWA)
 
-**Plataforma comercial e operacional completa para gastronomia e delivery**, desenvolvida para o restaurante *Assados na Brasa Vaguinho*. O projeto resolve integralmente o ciclo de vida do pedido: desde o autoatendimento e carrinho digital do consumidor até a gestão de estoque em tempo real na cozinha e campanhas ativas de WhatsApp com proteção antiban.
+> **Interface real em produção no smartphone:** Navegação rápida, personalização de carnes e guarnições, carrinho deslizante e checkout automático:
+
+<p align="center">
+  <img src="./cliente-pwa/screenshots/app%20clientes%201.jpeg" width="18%" alt="Cardápio Principal" />
+  <img src="./cliente-pwa/screenshots/app%20clientes%202.jpeg" width="18%" alt="Personalização de Produto" />
+  <img src="./cliente-pwa/screenshots/app%20clientes%203.jpeg" width="18%" alt="Acompanhamentos" />
+  <img src="./cliente-pwa/screenshots/app%20clientes%204.jpeg" width="18%" alt="Carrinho Deslizante" />
+  <img src="./cliente-pwa/screenshots/app%20clientes%205.jpeg" width="18%" alt="Checkout" />
+</p>
 
 ---
 
-## 📸 Telas da Aplicação
+## 📱 Visão Geral da Solução Comercial
 
-### 1. Aplicativo Mobile do Cliente (PWA)
-Interface pensada para compra em menos de 1 minuto em smartphones, com categorização clara, opções de ponto de carne e carrinho deslizante:
-
-<p align="center">
-  <img src="./cliente-pwa/screenshots/app%20clientes%201.jpeg" width="23%" alt="Cardápio Principal" />
-  <img src="./cliente-pwa/screenshots/app%20clientes%202.jpeg" width="23%" alt="Detalhe do Produto" />
-  <img src="./cliente-pwa/screenshots/app%20clientes%203.jpeg" width="23%" alt="Seleção de Acompanhamentos" />
-  <img src="./cliente-pwa/screenshots/app%20clientes%204.jpeg" width="23%" alt="Carrinho e Checkout" />
-</p>
+**Plataforma comercial e operacional completa para gastronomia e delivery**, desenvolvida para o restaurante *Assados na Brasa Vaguinho*. O projeto resolve integralmente o ciclo de vida do pedido: desde o autoatendimento e carrinho digital do consumidor até a gestão de estoque em tempo real na cozinha e campanhas ativas de WhatsApp com proteção antiban.
 
 ### 2. Painel Administrativo de Cozinha (Shadcn UI + Supabase Realtime)
 Permite aos operadores da cozinha e administradores alterar a disponibilidade de carnes e guarnições com atualização instantânea na ponta do cliente via WebSockets:
