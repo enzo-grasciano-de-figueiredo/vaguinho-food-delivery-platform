@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+    <defs>
+      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#450a0a"/><stop offset="100%" stop-color="#09090b"/>
+      </linearGradient>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.6" />
+      </filter>
+    </defs>
+    <rect width="800" height="600" fill="url(#bg)" />
+    <g filter="url(#shadow)">
+      <rect x="340" y="100" width="120" height="340" rx="40" fill="#180808" stroke="#dc2626" stroke-width="4" />
+     <rect x="340" y="200" width="120" height="100" fill="#dc2626" />
+     <text x="400" y="260" font-family="sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle">Coca-Cola 2L</text>
+     <rect x="380" y="70" width="40" height="30" fill="#dc2626" rx="5" />
+    </g>
+    <rect x="0" y="500" width="800" height="100" fill="rgba(0,0,0,0.7)" />
+    <text x="400" y="560" font-family="sans-serif" font-weight="900" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="1">
+      COCA-COLA 2 LITROS
+    </text>
+  </svg>

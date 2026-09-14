@@ -1,0 +1,2655 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2464,
+        1008
+      ],
+      "id": "17e151c5-2bc1-4137-98eb-6b22d09fa09b",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.delay_gerado }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3168,
+        1024
+      ],
+      "id": "db9aa6bd-2d60-4ef5-9fad-65bb826c56ac",
+      "name": "Delay2",
+      "webhookId": "86daa08d-856b-4f57-8abc-3f5f5fe08dca"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega os valores mínimo e máximo do delay\nconst delayMinimo = $('Validação de Horário').first().json.delay_minimo_mensagens;\nconst delayMaximo = $('Validação de Horário').first().json.delay_maximo_mensagens;\n\n// Valida se os valores são números válidos\nif (!delayMinimo || !delayMaximo || isNaN(delayMinimo) || isNaN(delayMaximo)) {\n  throw new Error('Valores de delay mínimo e máximo devem ser números válidos');\n}\n\n// Converte para números (caso venham como string)\nconst min = Number(delayMinimo);\nconst max = Number(delayMaximo);\n\n// Valida se mínimo é menor que máximo\nif (min > max) {\n  throw new Error('Delay mínimo não pode ser maior que o máximo');\n}\n\n// Gera um número aleatório entre min e max (inclusive)\nconst delayAleatorio = Math.floor(Math.random() * (max - min + 1)) + min;\n\nreturn [\n  {\n    json: {\n      delay_gerado: delayAleatorio,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2960,
+        1024
+      ],
+      "id": "40f261d3-263e-4f23-8858-2e67d33cf049",
+      "name": "Gerador de Delay10"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        896
+      ],
+      "id": "8cc109d5-5fd7-4205-8d07-a329dcfcf5d3",
+      "name": "No Operation, do nothing28"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=nome = {{ $json.nome }}",
+        "options": {
+          "systemMessage": "=## Instruções\nAtue como um expert especialista em copywriting para WhatsApp.\n\nSeu trabalho é simples, identificar se o nome \"{{ $json.nome }}\" é masculino ou feminino e substituí-lo ao início da seguinte <mensagem> no campo <substituir> usando o prefixo para senhor (Sr) ou senhora (Sra). Após isso, deve criar uma continuação de frase que remeta a novidade \"os combos de natal e ano novo do Vaguinho ESTÃO DE VOLTA!\", a frase não deve ser totalmente parecida com as enviadas anteriormente, pois queremos mensagens personalizadas.\n\n<mensagem>\n\"emoji de natal\"  \n<substituir>\nSr Sérgio\n</substituir>\n, \n<continuacao>\nos combos de natal do Vaguinho ESTÃO DE VOLTA!\n</continuacao>\n</mensagem>\n\nSe tiver mais de um nome, deve ser escolhido o primeiro.\n\nO Nome deve Começar com a primeira letra Maiúscula.\n\nO \"Sr\" ou \"Sra\" deve começar com a primeira letra Maiúscula\n\n\n## Exemplos (não copiar, apenas usar como exemplo): \n\n- Para senhor.\n\"🎄 Sr Sérgio, os combos de natal do Vaguinho ESTÃO DE VOLTA!\";\n\n- para senhora.\n\"🎄 Sra Andréa, os combos de natal do Vaguinho ESTÃO DE VOLTA!\".\n\n\n## Restrições (tanto para letras maiúsculas quanto minúsculas)\n- Se o nome estiver em branco (\"null\"), deve ser referido como \"Sr cliente\";\n- Se não houver certeza quanto ao gênero relacionado ao nome, deve ser referido como \"Sr cliente\";\n- Não tente corrigir os Nomes, está permitido correção apenas se o erro for de codificação, como caracteres especiais indevidos;\n- Se parte do nome ou sobrenome for um número, deve ser ignorado o número; \n- Se Parte do nome ou sobrenome for \"cliente\" ou próximo a isso, deve ser Ignorado o \"cliente\" ou aproximação;\n- Se Parte do nome ou sobrenome for \"ligou\" ou próximo a isso, deve ser Ignorado o \"ligou\" ou aproximação;\n- Se Parte do nome ou sobrenome for \"DJ\" ou Outra profissão, deve ser Ignorada a profissão;\n- Se Parte do nome ou sobrenome for entre parênteses \"(...)\", deve ser Ignorado o Conteúdo entre parênteses;\n- Se houver um nome masculino junto de um feminino, deve ser levado em consideração o que aparece primeiro;\n- A sequência de caractéres \"Ã©\" deve ser interpretada e escrita no output como \"é\";\n- Pontos \".\", Traços \"-\", Underlines \"_\", Virgulas \",\" e acentos sem letra \"~\" \"´\" \"^\", devem ser ignorados;\n- Jamais envie mensagens de feedback como \"Se precisar de mais alguma mensagem ou ajuste, estou à disposição!\". O conteúdo gerado, será enviado eutomaticamente ao cliente final.\n\n\n## Ferramentas\n- Ative a tool \"Wikipedia\" Para descobrir o gênero dos nomes;\n- Ative a tool \"Mensagens Anteriores\" para saber quais ja foram enviadas a outros clientes pois não deve ser igual.\n\n\n## Variáveis\n- Estamos situados em Curitiba-PR, Brasil. Use essa informação para auxiliar na identificação dos gêneros de cada nome."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        3712,
+        1024
+      ],
+      "id": "956e1886-f607-4d24-9d7c-6e9eea3a639f",
+      "name": "AI Agent2",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "## Cria Mensagens Personalizadas",
+        "height": 488,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3584,
+        864
+      ],
+      "id": "edbda1c5-0ca2-43b1-9f97-373f500bd818",
+      "name": "Sticky Note57"
+    },
+    {
+      "parameters": {
+        "content": "## Envio das Respostas ao Usuário\nEnvio das mensagens para o usuário",
+        "height": 348,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4096,
+        864
+      ],
+      "id": "32bdb38f-7c21-4cd7-865c-576f52ce80b1",
+      "name": "Sticky Note58"
+    },
+    {
+      "parameters": {
+        "content": "## Set - DO DIA!",
+        "height": 1996,
+        "width": 244,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        896,
+        80
+      ],
+      "id": "9aad3691-1f2a-49e9-b6bd-7012aea75738",
+      "name": "Sticky Note59"
+    },
+    {
+      "parameters": {
+        "content": "## SISTEMA ANTI-BAN POR DELAY ALEATÓRIO DE ENVIO",
+        "height": 368,
+        "width": 432,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2896,
+        864
+      ],
+      "typeVersion": 1,
+      "id": "00227b8e-4122-498b-9efa-521f121653e4",
+      "name": "Sticky Note60"
+    },
+    {
+      "parameters": {
+        "content": "## Loop Envio 1 Por Vez",
+        "height": 368,
+        "width": 496,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2384,
+        864
+      ],
+      "typeVersion": 1,
+      "id": "cf060a5a-5f8f-44eb-8ec9-89c9f790ecd0",
+      "name": "Sticky Note61"
+    },
+    {
+      "parameters": {
+        "content": "## Atualiza Status\n",
+        "height": 352,
+        "width": 256,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4576,
+        1152
+      ],
+      "typeVersion": 1,
+      "id": "a01c012e-b7f8-4f12-beb9-1e0f2dd6a439",
+      "name": "Sticky Note62"
+    },
+    {
+      "parameters": {
+        "content": "## Chat Trigger Programado\n",
+        "height": 284,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        800
+      ],
+      "id": "3d6cca3c-bf63-445d-94d5-6244b083f6d9",
+      "name": "Sticky Note64"
+    },
+    {
+      "parameters": {
+        "content": "## Valida Horário Diário de Envio\n",
+        "height": 444,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        864
+      ],
+      "id": "d707bb68-5786-4ae3-8e12-9bc66b388563",
+      "name": "Sticky Note65"
+    },
+    {
+      "parameters": {
+        "content": "## Busca Clientes\n",
+        "height": 444,
+        "width": 276,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        864
+      ],
+      "id": "043bc289-848f-4d1c-b48a-55f8312fae45",
+      "name": "Sticky Note66"
+    },
+    {
+      "parameters": {
+        "content": "## Limita Clientes Por Hora \n",
+        "height": 364,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1904,
+        864
+      ],
+      "id": "b732fdd4-d72e-4fe9-84c9-b5c63edaec80",
+      "name": "Sticky Note67"
+    },
+    {
+      "parameters": {
+        "content": "## Set (Auxilio)\n",
+        "height": 364,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        864
+      ],
+      "id": "89447983-fdf0-4022-8834-f794fbb98d78",
+      "name": "Sticky Note68"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        3968,
+        1216
+      ],
+      "id": "a2f23c9a-ba4e-4d38-aa30-cf5d954fb6d2",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "disparos_anteriores",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        3808,
+        1216
+      ],
+      "id": "8d0c03d0-0ee4-4ba8-8143-bc6b43264a9b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        3648,
+        1216
+      ],
+      "id": "dcd05ac5-5118-4b7f-b785-30d36121b305",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "gpazX9PxREMVbXll",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        1200
+      ],
+      "id": "73592e87-5074-46fc-898a-a9a11ca38fbb",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## CENTRAL DE CONTROLE FIXA",
+        "height": 380,
+        "width": 516,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        896
+      ],
+      "id": "0e8d4952-f5db-4a2a-bc89-ed77976711fc",
+      "name": "Sticky Note63"
+    },
+    {
+      "parameters": {
+        "content": "## Chat Trigger Manual\n",
+        "height": 300,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        1088
+      ],
+      "id": "5af7c9c0-832d-48c3-bbaa-adb6595d2f88",
+      "name": "Sticky Note73"
+    },
+    {
+      "parameters": {
+        "content": "## Filtro - QUAL DIA?",
+        "height": 1996,
+        "width": 260,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        320,
+        80
+      ],
+      "id": "e098c61f-78a3-46e5-934a-369f43df3493",
+      "name": "Sticky Note74"
+    },
+    {
+      "parameters": {
+        "content": "## SISTEMA ANTI-BAN POR AQUECIMENTO DE CHIP CONTROLADO\nEnvios Por Hora:\nSexta - 3   //   Sábado - 7   //   Domingo - 12  //   Segunda - 4   //   Terça - 5   //   Quarta - 6   //   Quinta - 8   //   Sexta - 10   //   Sábado - 15   //   Domingo - 21",
+        "height": 2192,
+        "width": 1088,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "6fc7bfd9-80fa-4834-a8cc-b0e09f53e973",
+      "name": "Sticky Note78"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "800",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "1000",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 3,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        160
+      ],
+      "id": "f06c921d-4238-4fe1-86b7-73b59f8c11f2",
+      "name": "SET_CCV1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "300",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "450",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 7,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        352
+      ],
+      "id": "eef465f8-1e18-4340-a7df-f1c6e02d3d80",
+      "name": "SET_CCV2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "61",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "240",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 12,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        544
+      ],
+      "id": "9dca5b67-3981-449c-a7ed-0267830622ed",
+      "name": "SET_CCV3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "500",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "800",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 4,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        736
+      ],
+      "id": "622a42ef-3ec0-4166-bea4-ed0e48535464",
+      "name": "SET_CCV4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "200",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "620",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 5,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        928
+      ],
+      "id": "ef0127c9-50b8-447a-a2de-bd7eab784502",
+      "name": "SET_CCV5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "150",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "500",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 6,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1120
+      ],
+      "id": "43839bce-9d6b-4eb5-b000-679a452e374d",
+      "name": "SET_CCV6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21e99e50-8978-4430-9ba6-9cb66829936c",
+              "name": "dia",
+              "value": "12",
+              "type": "string"
+            },
+            {
+              "id": "2155a530-50fa-4fa8-99e1-bec71582d1a8",
+              "name": "mes",
+              "value": "12",
+              "type": "string"
+            },
+            {
+              "id": "cbaa8e96-182d-41f7-a843-b1609beb2fa1",
+              "name": "ano",
+              "value": "2025",
+              "type": "string"
+            },
+            {
+              "id": "e95d533f-0b7a-4287-8cfd-c323796c8870",
+              "name": "={{ $today }}",
+              "value": "formato",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        1040
+      ],
+      "id": "ba810f63-a20a-4b47-9187-3d1abae73af6",
+      "name": "Data Inicio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0ad00025-8de2-45c9-86f5-a1b0a562ccc5",
+              "name": "dia_inicial",
+              "value": "={{ $json.ano }}-{{ $json.mes }}-{{ $json.dia }}T00:00:00.000-03:00",
+              "type": "string"
+            },
+            {
+              "id": "9a451aa6-a56c-4688-a6e6-979dc456f520",
+              "name": "horario_inicial_mensagens",
+              "value": 8,
+              "type": "number"
+            },
+            {
+              "id": "27010c13-ec2a-4b88-890b-a26226da7794",
+              "name": "horario_final_mensagens",
+              "value": 18,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        1040
+      ],
+      "id": "51622536-0666-4acb-945b-cee425862102",
+      "name": "Set_CC_Fixa"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        688,
+        1024
+      ],
+      "id": "9493479e-101d-41e6-93d0-10d149cd1686",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        176
+      ],
+      "id": "e91f4b9d-ed09-4d67-97bf-86f33d1d55ef",
+      "name": "If Primeiro Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(1, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        368
+      ],
+      "id": "afea164c-f88f-42e7-96bb-a9477925af6b",
+      "name": "If Segundo Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(2, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        560
+      ],
+      "id": "6450319e-4107-4abe-b66e-839ac881ffb2",
+      "name": "If Terceiro Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(3, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        752
+      ],
+      "id": "b5e72d1d-2709-4de0-a020-14f3f7c91299",
+      "name": "If Quarto Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(4, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        944
+      ],
+      "id": "ec9b2bfd-7a0e-4e59-973a-c51f183e6a5b",
+      "name": "If Quinto Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(5, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        1136
+      ],
+      "id": "9128c446-22a9-4622-bae2-d3af4fe8157e",
+      "name": "If Sexto Dia"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -432,
+        912
+      ],
+      "id": "515cbd1f-1bc8-4557-bdef-d4d18d2f6336",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "189603ce-729e-468d-9b84-0031efc4cea0",
+              "name": "telefone_cliente",
+              "value": "={{ $('Set AI').item.json.Telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "d3c2dd1d-6b3b-42bd-9dbc-2ec70417074d",
+              "name": "mensagem_personalizada",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "bc6d1eee-9392-4c2d-b4ce-d9344993c962",
+              "name": "imagem1_url",
+              "value": "https://f004.backblazeb2.com/file/temp-file-download/instances/YOUR_ZAPI_INSTANCE_ID/ACF4FC68FAE073E552DC515AEAE8EFA9/FbW3TIpGZi2-EpSeX40maw==.jpg",
+              "type": "string"
+            },
+            {
+              "id": "1a01dca7-e334-448f-8aea-994f6b7fb3f3",
+              "name": "imagem2_url",
+              "value": "https://f004.backblazeb2.com/file/temp-file-download/instances/YOUR_ZAPI_INSTANCE_ID/AC6DD5B761CB1D41531BB08FA30975AC/2HeH3pwkzj_rAUhSngFF6g==.jpg",
+              "type": "string"
+            },
+            {
+              "id": "b8f51878-171d-43bb-ac22-dfff5a0ecd11",
+              "name": "imagem3_url",
+              "value": "https://f004.backblazeb2.com/file/temp-file-download/instances/YOUR_ZAPI_INSTANCE_ID/AC642C71215F3A08FD0375DB8AC8618E/x37HV1JYzG65wLZpKeERJQ==.jpg",
+              "type": "string"
+            },
+            {
+              "id": "4ce4fec4-4ad9-47ad-8436-64eb5a4d2bc4",
+              "name": "imagem4_url",
+              "value": "https://f004.backblazeb2.com/file/temp-file-download/instances/YOUR_ZAPI_INSTANCE_ID/AC93DBBE0EBAE2D5D780A7BE11925C35/gL_8Cf6mxy0KRs78IToPwA==.jpg",
+              "type": "string"
+            },
+            {
+              "id": "104e26e8-4cdc-41f1-be48-6e7b01913115",
+              "name": "imagem5_url",
+              "value": "https://f004.backblazeb2.com/file/temp-file-download/instances/YOUR_ZAPI_INSTANCE_ID/ACD07570F755ED20D7A44CB23B0310D0/5_petgDPn1wh9Y5bUGwtBQ==.jpg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4176,
+        1024
+      ],
+      "id": "c1c6a067-4c6a-480b-996b-ea379363fb77",
+      "name": "Set Envio Mensagens"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(6, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        1312
+      ],
+      "id": "44f2b00c-8f1c-4ac5-bf0d-98356008a6ac",
+      "name": "If Sétimo Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(7, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        1504
+      ],
+      "id": "64fda4e6-ffbd-4e7d-97fe-fed25caba794",
+      "name": "If Oitavo Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(8, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        1696
+      ],
+      "id": "b839652a-f5b8-4649-ab90-9b1e69d8da6c",
+      "name": "If Nono Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0362c8b6-c781-47aa-993f-dfb5533dc821",
+              "leftValue": "={{ $today }}",
+              "rightValue": "={{ $json.dia_inicial.toDateTime().plus(9, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        1888
+      ],
+      "id": "b897b988-0eb1-41ac-bb6d-ecae44e57298",
+      "name": "If Décimo Dia"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f57fac2d-480a-4a68-9589-3002c2403d10",
+              "leftValue": "={{ $now.format('HH').toNumber() }}",
+              "rightValue": "={{ $('Set_CC_Fixa').item.json.horario_inicial_mensagens }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "440c031f-2e70-4baa-9f1b-4bcd714bf0d6",
+              "leftValue": "={{ $now.format('HH').toNumber() }}",
+              "rightValue": "={{ $('Set_CC_Fixa').item.json.horario_final_mensagens }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        1040
+      ],
+      "id": "9b7be41a-452a-49c4-b067-0614b9b233c4",
+      "name": "Validação de Horário"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Disparador de Mensagens N8N",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1982062757,
+          "mode": "list",
+          "cachedResultName": "Contatos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1982062757"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Aguardando"
+            },
+            {
+              "lookupColumn": "Observação",
+              "lookupValue": "OK"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1696,
+        944
+      ],
+      "id": "faaaf387-99de-442e-abc4-e57e0ace4701",
+      "name": "Pegar Contatos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "irKUmbtJ46iw2efl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        1136
+      ],
+      "id": "f6f6af97-66e8-486b-aaf2-e7d6e90b20c7",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $('Validação de Horário').item.json.numero_clientes_por_disparo }}"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        1008
+      ],
+      "id": "e909aff7-501f-4ed5-8791-bfc90126c145",
+      "name": "Limite"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17f1c279-f801-4037-9ca9-1c5b302d656b",
+              "name": "nome",
+              "value": "={{ $json.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "9fb5a507-887a-4fef-9706-d882465396a8",
+              "name": "Telefone",
+              "value": "={{ $json.Telefone }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2208,
+        1008
+      ],
+      "id": "48316799-8782-4114-8d40-951c1397b615",
+      "name": "Dados Lead2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "85",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "125",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 21,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1872
+      ],
+      "id": "504f1ef4-0c6f-4946-8d76-32072ae4ca34",
+      "name": "SET_CCV10"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "21",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "91",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 180,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1680
+      ],
+      "id": "cfd45d64-049a-4ae1-822d-34c1f39b97ae",
+      "name": "SET_CCV9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "71",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "300",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 10,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1488
+      ],
+      "id": "88d7b7a2-4d4f-41ef-9f0d-a873b541f6ba",
+      "name": "SET_CCV8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe02ec53-e54e-48c3-9e50-cf08f3318dbe",
+              "name": "delay_minimo_mensagens",
+              "value": "100",
+              "type": "string"
+            },
+            {
+              "id": "c6b688f9-f0db-49f0-8040-be9c9cf18354",
+              "name": "delay_maximo_mensagens",
+              "value": "350",
+              "type": "string"
+            },
+            {
+              "id": "5948b52a-8555-40d6-a3d5-f98e45ad74d7",
+              "name": "numero_clientes_por_disparo",
+              "value": 8,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        1296
+      ],
+      "id": "83143c53-062d-4e79-95ee-eed2f01128f8",
+      "name": "SET_CCV7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/YOUR_ZAPI_INSTANCE_ID/token/YOUR_ZAPI_TOKEN/send-carousel",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone\": \"{{ $json.telefone_cliente }}\",\n  \"message\": \"*{{ $json.mensagem_personalizada }}*\",\n  \"carousel\": [\n    {\n      \"text\": \"*Arraste e aproveite! ➡➡➡*\",\n      \"image\": \"{{ $json.imagem1_url }}\",\n      \"buttons\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"✅ Quero o Cardápio Completo!\",\n          \"type\": \"REPLY\"\n        },\n        {\n          \"id\": \"2\",\n          \"label\": \"❌ Não quero receber ofertas\",\n          \"type\": \"REPLY\"\n        }\n      ]\n    },\n    {\n      \"text\": \"*🥩 Combo Costela Premium*     Incluso: Maionese, Salpicão, Farofa, Arroz à Grega e Saladas...\",\n      \"image\": \"{{ $json.imagem2_url }}\",\n      \"buttons\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"Quero o Combo Costela!\",\n          \"type\": \"REPLY\"\n        },\n        {\n          \"id\": \"2\",\n          \"label\": \"Quero outra carne de Boi!\",\n          \"type\": \"REPLY\"\n        }\n      ]\n    },\n    {\n      \"text\": \"*🍗 Combo Chester Tradicional*     Incluso: Maionese, Salpicão, Farofa, Arroz à Grega e Saladas...\",\n      \"image\": \"{{ $json.imagem3_url }}\",\n      \"buttons\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"Quero o Combo Chester!\",\n          \"type\": \"REPLY\"\n        },\n        {\n          \"id\": \"2\",\n          \"label\": \"Quero outra opção de Frango!\",\n          \"type\": \"REPLY\"\n        }\n      ]\n    },\n    {\n      \"text\": \"*🥓 Combo Porco Especial*     Incluso: Maionese, Salpicão, Farofa, Arroz à Grega e Saladas...\",\n      \"image\": \"{{ $json.imagem4_url }}\",\n      \"buttons\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"Quero o Combo Porco!\",\n          \"type\": \"REPLY\"\n        },\n        {\n          \"id\": \"2\",\n          \"label\": \"Quero outra opção de Porco!\",\n          \"type\": \"REPLY\"\n        }\n      ]\n    },\n    {\n      \"text\": \"⚠ Últimas Chamadas: Reservas Limitadas!\",\n      \"image\": \"{{ $json.imagem5_url }}\",\n      \"buttons\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"✅ Falar com Atendente\",\n          \"type\": \"REPLY\"\n        },\n        {\n          \"id\": \"2\",\n          \"label\": \"Quero para o Ano Novo! 🥂🍾✨\",\n          \"type\": \"REPLY\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4384,
+        1024
+      ],
+      "id": "6eb6741d-8336-48e8-9d37-dda4d300b0da",
+      "name": "Envio Carrossel",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "esnCuIcYJOSA3L2p",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Disparador de Mensagens N8N",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1982062757,
+          "mode": "list",
+          "cachedResultName": "Contatos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1982062757"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $('Set AI').item.json.Telefone }}",
+            "Status": "Enviado",
+            "Data de Atualização": "={{ $now }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data de Atualização",
+              "displayName": "Data de Atualização",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Observação",
+              "displayName": "Observação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4656,
+        1280
+      ],
+      "id": "eed2304a-770a-4f08-9d1a-45e77c9b7df3",
+      "name": "Atualizar Status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "irKUmbtJ46iw2efl",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9f488c5c-0b3b-48e9-87b1-5a22d513d1ec",
+              "name": "IdConversa",
+              "value": "={{ $('Webhook').item.json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "69f6217f-9063-423f-abf4-e94f6b70f94e",
+              "name": "LeadNome",
+              "value": "={{ $('Webhook').item.json.body.senderName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c18ceb58-b907-49cb-a344-7de6feea75fb",
+      "name": "Dados Lead",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        352
+      ],
+      "disabled": true,
+      "notes": "TEMPLATE DESENVOLVIDO POR NOCODE STARTUP\nhttps://nocodestartup.io/\n\nFORMAÇÃO GESTOR DE AGENTES DE IA:\nhttps://nocodestartup.io/formacao-gestor-agentes-ia/"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-zapi-assado",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        352
+      ],
+      "id": "f5fe3940-29ef-4cbb-9e47-56a83bc70b01",
+      "name": "Webhook",
+      "webhookId": "9c999047-c050-412e-9f87-6c899d49d423",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Gatilho  Unsubscribe\n",
+        "height": 284,
+        "width": 196,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        256
+      ],
+      "id": "1c20f9e6-20b0-49ed-be16-9f99611fd0bf",
+      "name": "Sticky Note69",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Filtros",
+        "height": 284,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1776,
+        256
+      ],
+      "id": "d613a66d-fa2d-443b-9b74-b4407e20ad7a",
+      "name": "Sticky Note70",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Dados do Lead",
+        "height": 284,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        256
+      ],
+      "id": "5a1882ff-b565-4e7e-a502-7e7b99d083ba",
+      "name": "Sticky Note71",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Cancelar Inscrição",
+        "height": 368,
+        "width": 1472,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "0be0186d-a888-413f-b783-dcc52e8f1b4b",
+      "name": "Sticky Note79",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Atualiza Inscrição",
+        "height": 284,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        256
+      ],
+      "id": "7e350611-ceea-49eb-976d-f9ed7b7e089a",
+      "name": "Sticky Note",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Dados do Lead",
+        "height": 284,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        256
+      ],
+      "id": "868bf79e-c85e-4e2d-a730-df72cc98865a",
+      "name": "Sticky Note72",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        352
+      ],
+      "id": "1759ab4e-b96d-4482-8ea3-edcf768bc321",
+      "name": "No Operation, do nothing1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Disparador de Mensagens N8N",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1982062757,
+          "mode": "list",
+          "cachedResultName": "Contatos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1982062757"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $json.IdConversa }}",
+            "Observação": "Pediu Para Cessar Mensagens"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data de Atualização",
+              "displayName": "Data de Atualização",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Observação",
+              "displayName": "Observação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2320,
+        352
+      ],
+      "id": "f2d97c24-165c-4710-98bd-5d02b03c6feb",
+      "name": "Atualiza Inscrição Planinha",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "irKUmbtJ46iw2efl",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/YOUR_ZAPI_INSTANCE_ID/token/YOUR_ZAPI_TOKEN/send-text",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "phone",
+              "value": "={{ $('Dados Lead').item.json.IdConversa }}"
+            },
+            {
+              "name": "message",
+              "value": "=Inscrição Cancelada! Agradecemos o FeedBack"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2560,
+        352
+      ],
+      "id": "c0f5c94e-28d0-4c45-89c0-e85948d922db",
+      "name": "Envia Cancelamento Inscrição",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "esnCuIcYJOSA3L2p",
+          "name": "Header Auth account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b308e6dc-32eb-460e-9e1e-4886cfff7548",
+              "leftValue": "={{ $json.body.isStatusReply }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f5fed416-d8c0-457e-ab57-ed28411c7731",
+              "leftValue": "={{ $json.body.isEdit }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5eb5fd52-7a5d-4978-a0b8-2cd450e8a331",
+              "leftValue": "={{ $json.body.isGroup }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "852fe968-69cd-40d3-a250-c5040eba344c",
+              "leftValue": "={{ $json.body.isNewsletter }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "728000dc-7de8-43f3-86dc-5759e68cadab",
+              "leftValue": "={{ $json.body.fromMe }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d6399305-dc5b-4ff4-8afb-02f7fbcde733",
+              "leftValue": "={{ $json.body.fromApi }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "9118c367-a385-479d-b307-6fb8f656e436",
+              "leftValue": "={{ $json.body.buttonReply }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "01639bb0-b9b1-42f8-90f9-82f1cdc08ba7",
+              "leftValue": "={{ $json.body.buttonReply.carouselCardIndex }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "eab84333-cb19-4786-bb42-ee8b2c04ba71",
+              "leftValue": "={{ $json.body.buttonReply.message }}",
+              "rightValue": "❌ Não quero receber ofertas",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1840,
+        352
+      ],
+      "id": "1924e91e-fe11-4f09-8ebb-3348c704c4f1",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        608
+      ],
+      "id": "54d2d077-44fb-41d8-9805-4b8af1653ef2",
+      "name": "No Operation, do nothing3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9bc9ca8a-9f7a-4c88-8908-73f463a0fc70",
+              "name": "nome",
+              "value": "Enzo Grasciano de Figueiredo",
+              "type": "string"
+            },
+            {
+              "id": "3c4809df-f791-415d-9a74-79f9d66bfff2",
+              "name": "telefone",
+              "value": "5541999999999",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2992,
+        1488
+      ],
+      "id": "2962e7d0-328e-47b2-9229-a20ccc26b3d8",
+      "name": "Tteste Enzo",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Set AI\ncolocar do loop para produção ou do teste em testes",
+        "height": 364,
+        "width": 228,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3344,
+        864
+      ],
+      "id": "74ef5484-0983-4334-90e9-a66319d9157a",
+      "name": "Sticky Note75"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17f1c279-f801-4037-9ca9-1c5b302d656b",
+              "name": "nome",
+              "value": "={{ $('Loop Over Items4').item.json.nome }}",
+              "type": "string"
+            },
+            {
+              "id": "9fb5a507-887a-4fef-9706-d882465396a8",
+              "name": "Telefone",
+              "value": "={{ $('Loop Over Items4').item.json.Telefone }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3408,
+        1024
+      ],
+      "id": "0909b1ab-328d-4aa2-8511-330e60738217",
+      "name": "Set AI"
+    },
+    {
+      "parameters": {
+        "content": "## Set (Auxilio)\nUsar para testes\n\nnome: Enzo Grasciano de Figueiredo\ntelefone: 5541999999999\n\nINPUT -> Chat Trigger Manual\nOUTPUT -> Set AI",
+        "height": 444,
+        "width": 292,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        1248
+      ],
+      "id": "f672d722-95b1-462a-901f-904016aa09c5",
+      "name": "Sticky Note76"
+    }
+  ],
+  "connections": {
+    "Loop Over Items4": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing28",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gerador de Delay10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delay2": {
+      "main": [
+        [
+          {
+            "node": "Set AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerador de Delay10": {
+      "main": [
+        [
+          {
+            "node": "Delay2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Set Envio Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Tteste Enzo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV1": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV2": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV3": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV4": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV5": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV6": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Inicio": {
+      "main": [
+        [
+          {
+            "node": "Set_CC_Fixa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set_CC_Fixa": {
+      "main": [
+        [
+          {
+            "node": "If Primeiro Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Segundo Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Quarto Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Quinto Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Sexto Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Terceiro Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Sétimo Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Oitavo Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Nono Dia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Décimo Dia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Primeiro Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Segundo Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Terceiro Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Quarto Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Quinto Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Sexto Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Data Inicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Envio Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Envio Carrossel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Sétimo Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Oitavo Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Nono Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Décimo Dia": {
+      "main": [
+        [
+          {
+            "node": "SET_CCV10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validação de Horário": {
+      "main": [
+        [
+          {
+            "node": "Pegar Contatos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar Contatos": {
+      "main": [
+        [
+          {
+            "node": "Limite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limite": {
+      "main": [
+        [
+          {
+            "node": "Dados Lead2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados Lead2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV10": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV9": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV8": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET_CCV7": {
+      "main": [
+        [
+          {
+            "node": "Validação de Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envio Carrossel": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Status": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados Lead": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Inscrição Planinha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualiza Inscrição Planinha": {
+      "main": [
+        [
+          {
+            "node": "Envia Cancelamento Inscrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envia Cancelamento Inscrição": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Dados Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tteste Enzo": {
+      "main": [
+        []
+      ]
+    },
+    "Set AI": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "0ebd8ab5fe11e53c326b9c20a10c05b08f1e08cdfba335c83e87e78d573f5a97"
+  }
+}
+

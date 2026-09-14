@@ -1,0 +1,16 @@
+node_modules/
+dist/
+*.tar.gz
+*.zip
+*.xlsx
+*.csv
+*.vcf
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

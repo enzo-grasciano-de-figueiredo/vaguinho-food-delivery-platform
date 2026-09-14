@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+    <defs>
+      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#451a03"/><stop offset="100%" stop-color="#09090b"/>
+      </linearGradient>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.6" />
+      </filter>
+    </defs>
+    <rect width="800" height="600" fill="url(#bg)" />
+    <g filter="url(#shadow)">
+      <ellipse cx="320" cy="270" rx="28" ry="18" fill="#78350f" />
+     <ellipse cx="380" cy="290" rx="28" ry="18" fill="#78350f" />
+     <ellipse cx="440" cy="260" rx="28" ry="18" fill="#78350f" />
+     <ellipse cx="490" cy="300" rx="28" ry="18" fill="#78350f" stroke="#16a34a" stroke-width="4" />
+    </g>
+    <rect x="0" y="500" width="800" height="100" fill="rgba(0,0,0,0.7)" />
+    <text x="400" y="560" font-family="sans-serif" font-weight="900" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="1">
+      SALADA DE FEIJÃO CAVALO
+    </text>
+  </svg>
